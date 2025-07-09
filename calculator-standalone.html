@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One Calculator Suite</title>
+    <meta name="description" content="Professional calculator suite with 10 essential calculators including GST, Currency, EMI, BMI, Age, Percentage, Unit Converter, Scientific, Time, and Discount calculators.">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --accent-blue: #3b82f6;
+            --accent-emerald: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-amber: #f59e0b;
+            --accent-green: #22c55e;
+            --accent-teal: #14b8a6;
+            --accent-indigo: #6366f1;
+            --accent-violet: #7c3aed;
+            --accent-red: #ef4444;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #475569;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-toggle, .lang-select {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover, .lang-select:hover {
+            background: var(--border);
+        }
+
+        /* Container and Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* Calculator Grid */
+        .calculators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .calculator-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .calculator-card:hover .card-icon {
+            transform: scale(1.1);
+        }
+
+        .card-category {
+            background: rgb(59 130 246 / 0.1);
+            color: var(--accent-blue);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-link {
+            color: var(--accent-blue);
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: opacity 0.2s ease;
+        }
+
+        .card-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Gradient Classes */
+        .gradient-emerald { background: linear-gradient(135deg, #10b981, #059669); }
+        .gradient-primary { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .gradient-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .gradient-pink { background: linear-gradient(135deg, #ec4899, #db2777); }
+        .gradient-amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .gradient-green { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .gradient-teal { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+        .gradient-indigo { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+        .gradient-violet { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+        .gradient-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+        /* Calculator Page Styles */
+        .calculator-page {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .calculator-page.active {
+            display: block;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .page-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .calculator-form {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+            color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .result-value {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Back Button */
+        .back-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .calculators-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo" onclick="showHome()">🧮 Calculator Suite</a>
+            <div class="header-controls">
+                <select class="lang-select" onchange="changeLanguage(this.value)">
+                    <option value="en">🇺🇸 English</option>
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                    <option value="hi">🇮🇳 हिंदी</option>
+                </select>
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Home Page -->
+        <div id="home" class="page">
+            <section class="hero">
+                <div class="container">
+                    <h1 class="fade-in">All-in-One Calculator Suite</h1>
+                    <p class="fade-in">Professional calculator tools for all your mathematical, financial, and conversion needs with multi-language support.</p>
+                    
+                    <div class="search-container fade-in">
+                        <div class="search-icon">🔍</div>
+                        <input type="text" class="search-input" placeholder="Search calculators..." onkeyup="searchCalculators(this.value)">
+                    </div>
+                </div>
+            </section>
+
+            <section class="container">
+                <div class="calculators-grid" id="calculators-grid">
+                    <!-- GST Calculator -->
+                    <a href="#" class="calculator-card fade-in" onclick="showCalculator('gst')">
+                        <div class="card-header">
+                            <div class="card-icon gradient-emerald">🧾</div>
+                            <span class="card-category">Finance</span>
+                        </div>
+                        <h3 class="card-title">GST Calculator</h3>
+                        <p class="card-description">Calculate GST amounts with inclusive and exclusive pricing options.</p>
+                        <span class="card-link">Open Calculator →</span>
+                    </a>
+
+                    <!-- Currency Converter -->
+                    <a href="#" class="calculator-card fade-in" onclick="showCalculator('currency')">
+                        <div class="card-header">
+                            <div class="card-icon gradient-primary">💱</div>
+                            <span class="card-category">Finance</span>
+                        </div>
+                        <h3 class="card-title">Currency Converter</h3>
+                        <p class="card-description">Convert between different currencies with real-time exchange rates.</p>
+                        <span class="card-link">Open Calculator →</span>
+                    </a>
+
+                    <!-- EMI Calculator -->
+                    <a href="#" class="calculator-card fade-in" onclick="showCalculator('emi')">
+                        <div class="card-header">
+                            <div class="card-icon gradient-purple">🏠</div>
+                            <span class="card-category">Finance</span>
+                        </div>
+                        <h3 class="card-title">EMI Calculator</h3>
+                        <p class="card-description">Calculate loan EMI, total interest, and amortization schedule.</p>
+                        <span class="card-link">Open Calculator →</span>
+                    </a>
+
+                    <!-- BMI Calculator -->
+                    <a href="#" class="calculator-card fade-in" onclick="showCalculator('bmi')">
+                        <div class="card-header">
+                            <div class="card-icon gradient-pink">💪</div>
+                            <span class="card-category">Health</span>
+                        </div>
+                        <h3 class="card-title">BMI Calculator</h3>
+                        <p class="card-description">Calculate Body Mass Index and get health recommendations.</p>
+                        <span class="card-link">Open Calculator →</span>
+                    </a>
+
+                    <!-- Age Calculator -->
+                    <a href="#" class="calculator-card fade-in" onclick="showCalculator('age')">
+                        <div class="card-header">
+                            <div class="card-icon gradient-amber">📅</div>
+                            <span class="card-category">Time</span>
+                        </div>
+                        <h3 class="card-title">Age Calculator</h3>
+                        <p class="card-description">Calculate precise age in years, months, days, and more.</p>
+                        <span class="card-link">Open Calculator →</span>
+                    </a>
+
+                    <!-- Percentage Calculator -->
+                    <a href="#" class="calculator-card fade-in" onclick="showCalculator('percentage')">
+                        <div class="card-header">
+                            <div class="card-icon gradient-green">📊</div>
+                            <span class="card-category">Math</span>
+                        </div>
+                        <h3 class="card-title">Percentage Calculator</h3>
+                        <p class="card-description">Calculate percentages, ratios, and percentage changes.</p>
+                        <span class="card-link">Open Calculator →</span>
+                    </a>
+
+                    <!-- Unit Converter -->
+                    <a href="#" class="calculator-card fade-in" onclick="showCalculator('unit')">
+                        <div class="card-header">
+                            <div class="card-icon gradient-teal">📏</div>
+                            <span class="card-category">Conversion</span>
+                        </div>
+                        <h3 class="card-title">Unit Converter</h3>
+                        <p class="card-description">Convert between different units of measurement.</p>
+                        <span class="card-link">Open Calculator →</span>
+                    </a>
+
+                    <!-- Scientific Calculator -->
+                    <a href="#" class="calculator-card fade-in" onclick="showCalculator('scientific')">
+                        <div class="card-header">
+                            <div class="card-icon gradient-indigo">🔬</div>
+                            <span class="card-category">Math</span>
+                        </div>
+                        <h3 class="card-title">Scientific Calculator</h3>
+                        <p class="card-description">Advanced mathematical functions and scientific calculations.</p>
+                        <span class="card-link">Open Calculator →</span>
+                    </a>
+
+                    <!-- Time Calculator -->
+                    <a href="#" class="calculator-card fade-in" onclick="showCalculator('time')">
+                        <div class="card-header">
+                            <div class="card-icon gradient-violet">⏰</div>
+                            <span class="card-category">Time</span>
+                        </div>
+                        <h3 class="card-title">Time Calculator</h3>
+                        <p class="card-description">Calculate time duration, add/subtract time periods.</p>
+                        <span class="card-link">Open Calculator →</span>
+                    </a>
+
+                    <!-- Discount Calculator -->
+                    <a href="#" class="calculator-card fade-in" onclick="showCalculator('discount')">
+                        <div class="card-header">
+                            <div class="card-icon gradient-red">🏷️</div>
+                            <span class="card-category">Shopping</span>
+                        </div>
+                        <h3 class="card-title">Discount Calculator</h3>
+                        <p class="card-description">Calculate discounts, sale prices, and savings amounts.</p>
+                        <span class="card-link">Open Calculator →</span>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <!-- GST Calculator Page -->
+        <div id="gst-calculator" class="calculator-page">
+            <div class="container">
+                <a href="#" class="back-btn" onclick="showHome()">← Back to Home</a>
+                <div class="page-header">
+                    <h1 class="page-title">🧾 GST Calculator</h1>
+                    <p class="page-description">Calculate GST amounts with inclusive and exclusive pricing options</p>
+                </div>
+
+                <div class="calculator-form">
+                    <div class="form-group">
+                        <label class="form-label">Amount</label>
+                        <input type="number" class="form-input" id="gst-amount" placeholder="Enter amount" value="1000">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">GST Rate (%)</label>
+                        <select class="form-select" id="gst-rate">
+                            <option value="5">5%</option>
+                            <option value="12">12%</option>
+                            <option value="18" selected>18%</option>
+                            <option value="28">28%</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Calculation Type</label>
+                        <select class="form-select" id="gst-type">
+                            <option value="exclusive">Exclusive (Add GST)</option>
+                            <option value="inclusive">Inclusive (Remove GST)</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="calculateGST()">Calculate GST</button>
+                </div>
+
+                <div id="gst-result" class="result-card hidden">
+                    <div class="result-value" id="gst-final-amount">₹1,180</div>
+                    <div class="result-label">Final Amount</div>
+                    <div style="margin-top: 1rem; opacity: 0.9;">
+                        <div>GST Amount: ₹<span id="gst-amount-display">180</span></div>
+                        <div>Original Amount: ₹<span id="gst-original-display">1000</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Currency Converter Page -->
+        <div id="currency-calculator" class="calculator-page">
+            <div class="container">
+                <a href="#" class="back-btn" onclick="showHome()">← Back to Home</a>
+                <div class="page-header">
+                    <h1 class="page-title">💱 Currency Converter</h1>
+                    <p class="page-description">Convert between different currencies</p>
+                </div>
+
+                <div class="calculator-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Amount</label>
+                            <input type="number" class="form-input" id="currency-amount" placeholder="Enter amount" value="100">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">From Currency</label>
+                            <select class="form-select" id="from-currency">
+                                <option value="USD" selected>USD - US Dollar</option>
+                                <option value="EUR">EUR - Euro</option>
+                                <option value="GBP">GBP - British Pound</option>
+                                <option value="INR">INR - Indian Rupee</option>
+                                <option value="JPY">JPY - Japanese Yen</option>
+                                <option value="CAD">CAD - Canadian Dollar</option>
+                                <option value="AUD">AUD - Australian Dollar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">To Currency</label>
+                            <select class="form-select" id="to-currency">
+                                <option value="USD">USD - US Dollar</option>
+                                <option value="EUR" selected>EUR - Euro</option>
+                                <option value="GBP">GBP - British Pound</option>
+                                <option value="INR">INR - Indian Rupee</option>
+                                <option value="JPY">JPY - Japanese Yen</option>
+                                <option value="CAD">CAD - Canadian Dollar</option>
+                                <option value="AUD">AUD - Australian Dollar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="convertCurrency()">Convert Currency</button>
+                </div>
+
+                <div id="currency-result" class="result-card hidden">
+                    <div class="result-value" id="currency-converted-amount">€85.00</div>
+                    <div class="result-label">Converted Amount</div>
+                    <div style="margin-top: 1rem; opacity: 0.9;">
+                        <div>Exchange Rate: 1 USD = <span id="exchange-rate">0.85</span> EUR</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMI Calculator Page -->
+        <div id="emi-calculator" class="calculator-page">
+            <div class="container">
+                <a href="#" class="back-btn" onclick="showHome()">← Back to Home</a>
+                <div class="page-header">
+                    <h1 class="page-title">🏠 EMI Calculator</h1>
+                    <p class="page-description">Calculate loan EMI, total interest, and repayment schedule</p>
+                </div>
+
+                <div class="calculator-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Loan Amount</label>
+                            <input type="number" class="form-input" id="loan-amount" placeholder="Enter loan amount" value="1000000">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Interest Rate (%)</label>
+                            <input type="number" class="form-input" id="interest-rate" placeholder="Annual interest rate" value="8.5" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Loan Tenure (Years)</label>
+                            <input type="number" class="form-input" id="loan-tenure" placeholder="Loan tenure in years" value="20">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="calculateEMI()">Calculate EMI</button>
+                </div>
+
+                <div id="emi-result" class="result-card hidden">
+                    <div class="result-value" id="emi-amount">₹8,678</div>
+                    <div class="result-label">Monthly EMI</div>
+                    <div style="margin-top: 1rem; opacity: 0.9;">
+                        <div>Total Interest: ₹<span id="total-interest">1,082,720</span></div>
+                        <div>Total Amount: ₹<span id="total-amount">2,082,720</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BMI Calculator Page -->
+        <div id="bmi-calculator" class="calculator-page">
+            <div class="container">
+                <a href="#" class="back-btn" onclick="showHome()">← Back to Home</a>
+                <div class="page-header">
+                    <h1 class="page-title">💪 BMI Calculator</h1>
+                    <p class="page-description">Calculate your Body Mass Index and get health recommendations</p>
+                </div>
+
+                <div class="calculator-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Weight</label>
+                            <input type="number" class="form-input" id="weight" placeholder="Enter weight" value="70">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Weight Unit</label>
+                            <select class="form-select" id="weight-unit">
+                                <option value="kg" selected>Kilograms (kg)</option>
+                                <option value="lbs">Pounds (lbs)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Height</label>
+                            <input type="number" class="form-input" id="height" placeholder="Enter height" value="175">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Height Unit</label>
+                            <select class="form-select" id="height-unit">
+                                <option value="cm" selected>Centimeters (cm)</option>
+                                <option value="ft">Feet (ft)</option>
+                                <option value="in">Inches (in)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="calculateBMI()">Calculate BMI</button>
+                </div>
+
+                <div id="bmi-result" class="result-card hidden">
+                    <div class="result-value" id="bmi-value">22.9</div>
+                    <div class="result-label">BMI</div>
+                    <div style="margin-top: 1rem; opacity: 0.9;">
+                        <div>Category: <span id="bmi-category">Normal Weight</span></div>
+                        <div id="bmi-recommendation">Your BMI is in the healthy range. Maintain your current lifestyle!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Age Calculator Page -->
+        <div id="age-calculator" class="calculator-page">
+            <div class="container">
+                <a href="#" class="back-btn" onclick="showHome()">← Back to Home</a>
+                <div class="page-header">
+                    <h1 class="page-title">📅 Age Calculator</h1>
+                    <p class="page-description">Calculate your precise age in years, months, days, and more</p>
+                </div>
+
+                <div class="calculator-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Birth Date</label>
+                            <input type="date" class="form-input" id="birth-date" value="1990-01-01">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Calculate Age As Of</label>
+                            <input type="date" class="form-input" id="target-date">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="calculateAge()">Calculate Age</button>
+                </div>
+
+                <div id="age-result" class="result-card hidden">
+                    <div class="result-value" id="age-years">34</div>
+                    <div class="result-label">Years Old</div>
+                    <div style="margin-top: 1rem; opacity: 0.9;">
+                        <div><span id="age-months">408</span> months</div>
+                        <div><span id="age-days">12,418</span> days</div>
+                        <div><span id="age-hours">298,032</span> hours</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Percentage Calculator Page -->
+        <div id="percentage-calculator" class="calculator-page">
+            <div class="container">
+                <a href="#" class="back-btn" onclick="showHome()">← Back to Home</a>
+                <div class="page-header">
+                    <h1 class="page-title">📊 Percentage Calculator</h1>
+                    <p class="page-description">Calculate percentages, ratios, and percentage changes</p>
+                </div>
+
+                <div class="calculator-form">
+                    <div class="form-group">
+                        <label class="form-label">Calculation Type</label>
+                        <select class="form-select" id="percentage-type" onchange="updatePercentageForm()">
+                            <option value="basic">What is X% of Y?</option>
+                            <option value="is">X is what % of Y?</option>
+                            <option value="of">X is Y% of what?</option>
+                            <option value="change">Percentage change from X to Y</option>
+                        </select>
+                    </div>
+                    <div id="percentage-inputs">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" id="input1-label">Percentage (%)</label>
+                                <input type="number" class="form-input" id="percentage-input1" placeholder="Enter percentage" value="20">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" id="input2-label">Number</label>
+                                <input type="number" class="form-input" id="percentage-input2" placeholder="Enter number" value="100">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="calculatePercentage()">Calculate</button>
+                </div>
+
+                <div id="percentage-result" class="result-card hidden">
+                    <div class="result-value" id="percentage-answer">20</div>
+                    <div class="result-label" id="percentage-result-label">Result</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unit Converter Page -->
+        <div id="unit-calculator" class="calculator-page">
+            <div class="container">
+                <a href="#" class="back-btn" onclick="showHome()">← Back to Home</a>
+                <div class="page-header">
+                    <h1 class="page-title">📏 Unit Converter</h1>
+                    <p class="page-description">Convert between different units of measurement</p>
+                </div>
+
+                <div class="calculator-form">
+                    <div class="form-group">
+                        <label class="form-label">Conversion Type</label>
+                        <select class="form-select" id="unit-type" onchange="updateUnitOptions()">
+                            <option value="length">Length</option>
+                            <option value="weight">Weight</option>
+                            <option value="temperature">Temperature</option>
+                            <option value="area">Area</option>
+                            <option value="volume">Volume</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Value</label>
+                            <input type="number" class="form-input" id="unit-value" placeholder="Enter value" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">From Unit</label>
+                            <select class="form-select" id="from-unit">
+                                <option value="m">Meter (m)</option>
+                                <option value="km">Kilometer (km)</option>
+                                <option value="cm">Centimeter (cm)</option>
+                                <option value="ft">Feet (ft)</option>
+                                <option value="in">Inch (in)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">To Unit</label>
+                            <select class="form-select" id="to-unit">
+                                <option value="m">Meter (m)</option>
+                                <option value="km">Kilometer (km)</option>
+                                <option value="cm">Centimeter (cm)</option>
+                                <option value="ft" selected>Feet (ft)</option>
+                                <option value="in">Inch (in)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="convertUnit()">Convert</button>
+                </div>
+
+                <div id="unit-result" class="result-card hidden">
+                    <div class="result-value" id="unit-converted-value">3.28</div>
+                    <div class="result-label" id="unit-result-label">Feet</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scientific Calculator Page -->
+        <div id="scientific-calculator" class="calculator-page">
+            <div class="container">
+                <a href="#" class="back-btn" onclick="showHome()">← Back to Home</a>
+                <div class="page-header">
+                    <h1 class="page-title">🔬 Scientific Calculator</h1>
+                    <p class="page-description">Advanced mathematical functions and scientific calculations</p>
+                </div>
+
+                <div class="calculator-form">
+                    <div class="form-group">
+                        <input type="text" class="form-input" id="scientific-display" placeholder="0" readonly style="text-align: right; font-size: 1.5rem; font-family: monospace;">
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; margin-top: 1rem;">
+                        <!-- Row 1 -->
+                        <button class="btn btn-secondary" onclick="clearDisplay()">C</button>
+                        <button class="btn btn-secondary" onclick="clearEntry()">CE</button>
+                        <button class="btn btn-secondary" onclick="appendToDisplay('(')">(</button>
+                        <button class="btn btn-secondary" onclick="appendToDisplay(')')">)</button>
+                        <button class="btn btn-secondary" onclick="deleteLast()">⌫</button>
+                        
+                        <!-- Row 2 -->
+                        <button class="btn btn-secondary" onclick="appendFunction('sin(')">sin</button>
+                        <button class="btn btn-secondary" onclick="appendFunction('cos(')">cos</button>
+                        <button class="btn btn-secondary" onclick="appendFunction('tan(')">tan</button>
+                        <button class="btn btn-secondary" onclick="appendFunction('log(')">log</button>
+                        <button class="btn btn-secondary" onclick="appendToDisplay('/')">/</button>
+                        
+                        <!-- Row 3 -->
+                        <button class="btn btn-secondary" onclick="appendNumber('7')">7</button>
+                        <button class="btn btn-secondary" onclick="appendNumber('8')">8</button>
+                        <button class="btn btn-secondary" onclick="appendNumber('9')">9</button>
+                        <button class="btn btn-secondary" onclick="appendFunction('sqrt(')">√</button>
+                        <button class="btn btn-secondary" onclick="appendToDisplay('*')">×</button>
+                        
+                        <!-- Row 4 -->
+                        <button class="btn btn-secondary" onclick="appendNumber('4')">4</button>
+                        <button class="btn btn-secondary" onclick="appendNumber('5')">5</button>
+                        <button class="btn btn-secondary" onclick="appendNumber('6')">6</button>
+                        <button class="btn btn-secondary" onclick="appendToDisplay('^')">x²</button>
+                        <button class="btn btn-secondary" onclick="appendToDisplay('-')">-</button>
+                        
+                        <!-- Row 5 -->
+                        <button class="btn btn-secondary" onclick="appendNumber('1')">1</button>
+                        <button class="btn btn-secondary" onclick="appendNumber('2')">2</button>
+                        <button class="btn btn-secondary" onclick="appendNumber('3')">3</button>
+                        <button class="btn btn-secondary" onclick="appendToDisplay('Math.PI')">π</button>
+                        <button class="btn btn-secondary" onclick="appendToDisplay('+')">+</button>
+                        
+                        <!-- Row 6 -->
+                        <button class="btn btn-secondary" onclick="appendNumber('0')" style="grid-column: span 2;">0</button>
+                        <button class="btn btn-secondary" onclick="appendToDisplay('.')">.</button>
+                        <button class="btn btn-secondary" onclick="appendToDisplay('Math.E')">e</button>
+                        <button class="btn" onclick="calculateScientific()" style="background: var(--accent-emerald);">=</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Calculator Page -->
+        <div id="time-calculator" class="calculator-page">
+            <div class="container">
+                <a href="#" class="back-btn" onclick="showHome()">← Back to Home</a>
+                <div class="page-header">
+                    <h1 class="page-title">⏰ Time Calculator</h1>
+                    <p class="page-description">Calculate time duration and perform time arithmetic</p>
+                </div>
+
+                <div class="calculator-form">
+                    <div class="form-group">
+                        <label class="form-label">Calculation Type</label>
+                        <select class="form-select" id="time-type" onchange="updateTimeForm()">
+                            <option value="duration">Time Duration</option>
+                            <option value="add">Add Time</option>
+                            <option value="subtract">Subtract Time</option>
+                        </select>
+                    </div>
+                    
+                    <div id="time-inputs">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Start Time</label>
+                                <input type="time" class="form-input" id="start-time" value="09:00">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">End Time</label>
+                                <input type="time" class="form-input" id="end-time" value="17:30">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="calculateTime()">Calculate</button>
+                </div>
+
+                <div id="time-result" class="result-card hidden">
+                    <div class="result-value" id="time-answer">8h 30m</div>
+                    <div class="result-label">Duration</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Discount Calculator Page -->
+        <div id="discount-calculator" class="calculator-page">
+            <div class="container">
+                <a href="#" class="back-btn" onclick="showHome()">← Back to Home</a>
+                <div class="page-header">
+                    <h1 class="page-title">🏷️ Discount Calculator</h1>
+                    <p class="page-description">Calculate discounts, sale prices, and savings amounts</p>
+                </div>
+
+                <div class="calculator-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Original Price</label>
+                            <input type="number" class="form-input" id="original-price" placeholder="Enter original price" value="100">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Discount (%)</label>
+                            <input type="number" class="form-input" id="discount-percent" placeholder="Enter discount percentage" value="20">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="calculateDiscount()">Calculate Discount</button>
+                </div>
+
+                <div id="discount-result" class="result-card hidden">
+                    <div class="result-value" id="final-price">$80</div>
+                    <div class="result-label">Final Price</div>
+                    <div style="margin-top: 1rem; opacity: 0.9;">
+                        <div>Discount Amount: $<span id="discount-amount">20</span></div>
+                        <div>You Save: $<span id="savings-amount">20</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Global variables
+        let currentLanguage = 'en';
+        let currentTheme = 'light';
+
+        // Exchange rates (in real app, fetch from API)
+        const exchangeRates = {
+            USD: { EUR: 0.85, GBP: 0.73, INR: 83.15, JPY: 110, CAD: 1.25, AUD: 1.35 },
+            EUR: { USD: 1.18, GBP: 0.86, INR: 97.82, JPY: 129.41, CAD: 1.47, AUD: 1.59 },
+            GBP: { USD: 1.37, EUR: 1.16, INR: 113.91, JPY: 150.70, CAD: 1.71, AUD: 1.85 },
+            INR: { USD: 0.012, EUR: 0.010, GBP: 0.009, JPY: 1.32, CAD: 0.015, AUD: 0.016 },
+            JPY: { USD: 0.009, EUR: 0.008, GBP: 0.007, INR: 0.76, CAD: 0.011, AUD: 0.012 },
+            CAD: { USD: 0.80, EUR: 0.68, GBP: 0.58, INR: 66.52, JPY: 88.00, AUD: 1.08 },
+            AUD: { USD: 0.74, EUR: 0.63, GBP: 0.54, INR: 61.56, JPY: 81.48, CAD: 0.93 }
+        };
+
+        // Unit conversion factors
+        const unitConversions = {
+            length: {
+                m: { km: 0.001, cm: 100, ft: 3.28084, in: 39.3701 },
+                km: { m: 1000, cm: 100000, ft: 3280.84, in: 39370.1 },
+                cm: { m: 0.01, km: 0.00001, ft: 0.0328084, in: 0.393701 },
+                ft: { m: 0.3048, km: 0.0003048, cm: 30.48, in: 12 },
+                in: { m: 0.0254, km: 0.0000254, cm: 2.54, ft: 0.0833333 }
+            },
+            weight: {
+                kg: { g: 1000, lb: 2.20462, oz: 35.274 },
+                g: { kg: 0.001, lb: 0.00220462, oz: 0.035274 },
+                lb: { kg: 0.453592, g: 453.592, oz: 16 },
+                oz: { kg: 0.0283495, g: 28.3495, lb: 0.0625 }
+            },
+            temperature: {
+                c: { f: (c) => (c * 9/5) + 32, k: (c) => c + 273.15 },
+                f: { c: (f) => (f - 32) * 5/9, k: (f) => ((f - 32) * 5/9) + 273.15 },
+                k: { c: (k) => k - 273.15, f: (k) => ((k - 273.15) * 9/5) + 32 }
+            }
+        };
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current date for age calculator
+            document.getElementById('target-date').value = new Date().toISOString().split('T')[0];
+            
+            // Initialize theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+            
+            // Initialize language
+            const savedLanguage = localStorage.getItem('language') || 'en';
+            changeLanguage(savedLanguage);
+            
+            // Auto-calculate on load
+            calculateGST();
+        });
+
+        // Theme functions
+        function toggleTheme() {
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            setTheme(newTheme);
+        }
+
+        function setTheme(theme) {
+            currentTheme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            document.querySelector('.theme-toggle').textContent = theme === 'light' ? '🌙' : '☀️';
+            localStorage.setItem('theme', theme);
+        }
+
+        // Language functions
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelector('.lang-select').value = lang;
+            localStorage.setItem('language', lang);
+            // In a real app, you'd update all text content here
+        }
+
+        // Navigation functions
+        function showHome() {
+            document.querySelectorAll('.page, .calculator-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('home').style.display = 'block';
+        }
+
+        function showCalculator(calculatorType) {
+            document.getElementById('home').style.display = 'none';
+            document.querySelectorAll('.calculator-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            const pageId = calculatorType + '-calculator';
+            const page = document.getElementById(pageId);
+            if (page) {
+                page.classList.add('active');
+            }
+        }
+
+        // Search functionality
+        function searchCalculators(query) {
+            const cards = document.querySelectorAll('.calculator-card');
+            const searchTerm = query.toLowerCase();
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const description = card.querySelector('.card-description').textContent.toLowerCase();
+                const isVisible = title.includes(searchTerm) || description.includes(searchTerm);
+                card.style.display = isVisible ? 'block' : 'none';
+            });
+        }
+
+        // Calculator functions
+        function calculateGST() {
+            const amount = parseFloat(document.getElementById('gst-amount').value) || 0;
+            const rate = parseFloat(document.getElementById('gst-rate').value) || 18;
+            const type = document.getElementById('gst-type').value;
+            
+            let gstAmount, finalAmount, originalAmount;
+            
+            if (type === 'exclusive') {
+                // Add GST to amount
+                gstAmount = (amount * rate) / 100;
+                finalAmount = amount + gstAmount;
+                originalAmount = amount;
+            } else {
+                // Remove GST from amount
+                originalAmount = amount / (1 + rate / 100);
+                gstAmount = amount - originalAmount;
+                finalAmount = amount;
+            }
+            
+            document.getElementById('gst-final-amount').textContent = '₹' + finalAmount.toLocaleString('en-IN', {maximumFractionDigits: 2});
+            document.getElementById('gst-amount-display').textContent = gstAmount.toLocaleString('en-IN', {maximumFractionDigits: 2});
+            document.getElementById('gst-original-display').textContent = originalAmount.toLocaleString('en-IN', {maximumFractionDigits: 2});
+            document.getElementById('gst-result').classList.remove('hidden');
+        }
+
+        function convertCurrency() {
+            const amount = parseFloat(document.getElementById('currency-amount').value) || 0;
+            const fromCurrency = document.getElementById('from-currency').value;
+            const toCurrency = document.getElementById('to-currency').value;
+            
+            let convertedAmount = amount;
+            let rate = 1;
+            
+            if (fromCurrency !== toCurrency) {
+                if (fromCurrency === 'USD') {
+                    rate = exchangeRates.USD[toCurrency] || 1;
+                    convertedAmount = amount * rate;
+                } else if (toCurrency === 'USD') {
+                    rate = 1 / (exchangeRates.USD[fromCurrency] || 1);
+                    convertedAmount = amount * rate;
+                } else {
+                    // Convert through USD
+                    const toUSD = 1 / (exchangeRates.USD[fromCurrency] || 1);
+                    const fromUSD = exchangeRates.USD[toCurrency] || 1;
+                    rate = toUSD * fromUSD;
+                    convertedAmount = amount * rate;
+                }
+            }
+            
+            const currencySymbols = {
+                USD: '$', EUR: '€', GBP: '£', INR: '₹', JPY: '¥', CAD: 'C$', AUD: 'A$'
+            };
+            
+            const symbol = currencySymbols[toCurrency] || toCurrency;
+            document.getElementById('currency-converted-amount').textContent = symbol + convertedAmount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('exchange-rate').textContent = rate.toFixed(4);
+            document.getElementById('currency-result').classList.remove('hidden');
+        }
+
+        function calculateEMI() {
+            const principal = parseFloat(document.getElementById('loan-amount').value) || 0;
+            const annualRate = parseFloat(document.getElementById('interest-rate').value) || 0;
+            const tenure = parseFloat(document.getElementById('loan-tenure').value) || 0;
+            
+            const monthlyRate = annualRate / (12 * 100);
+            const months = tenure * 12;
+            
+            let emi = 0;
+            if (monthlyRate > 0) {
+                emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+            } else {
+                emi = principal / months;
+            }
+            
+            const totalAmount = emi * months;
+            const totalInterest = totalAmount - principal;
+            
+            document.getElementById('emi-amount').textContent = '₹' + emi.toLocaleString('en-IN', {maximumFractionDigits: 0});
+            document.getElementById('total-interest').textContent = totalInterest.toLocaleString('en-IN', {maximumFractionDigits: 0});
+            document.getElementById('total-amount').textContent = totalAmount.toLocaleString('en-IN', {maximumFractionDigits: 0});
+            document.getElementById('emi-result').classList.remove('hidden');
+        }
+
+        function calculateBMI() {
+            let weight = parseFloat(document.getElementById('weight').value) || 0;
+            let height = parseFloat(document.getElementById('height').value) || 0;
+            const weightUnit = document.getElementById('weight-unit').value;
+            const heightUnit = document.getElementById('height-unit').value;
+            
+            // Convert to kg and meters
+            if (weightUnit === 'lbs') {
+                weight = weight * 0.453592;
+            }
+            
+            if (heightUnit === 'cm') {
+                height = height / 100;
+            } else if (heightUnit === 'ft') {
+                height = height * 0.3048;
+            } else if (heightUnit === 'in') {
+                height = height * 0.0254;
+            }
+            
+            const bmi = weight / (height * height);
+            
+            let category = '';
+            let recommendation = '';
+            
+            if (bmi < 18.5) {
+                category = 'Underweight';
+                recommendation = 'Consider consulting a healthcare provider for guidance on healthy weight gain.';
+            } else if (bmi < 25) {
+                category = 'Normal Weight';
+                recommendation = 'Your BMI is in the healthy range. Maintain your current lifestyle!';
+            } else if (bmi < 30) {
+                category = 'Overweight';
+                recommendation = 'Consider adopting a healthier diet and increasing physical activity.';
+            } else {
+                category = 'Obese';
+                recommendation = 'Consider consulting a healthcare provider for personalized advice.';
+            }
+            
+            document.getElementById('bmi-value').textContent = bmi.toFixed(1);
+            document.getElementById('bmi-category').textContent = category;
+            document.getElementById('bmi-recommendation').textContent = recommendation;
+            document.getElementById('bmi-result').classList.remove('hidden');
+        }
+
+        function calculateAge() {
+            const birthDate = new Date(document.getElementById('birth-date').value);
+            const targetDate = new Date(document.getElementById('target-date').value);
+            
+            const diffTime = targetDate - birthDate;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+            const diffMonths = Math.floor(diffDays / 30.44); // Average month length
+            const diffYears = Math.floor(diffDays / 365.25); // Account for leap years
+            
+            document.getElementById('age-years').textContent = diffYears;
+            document.getElementById('age-months').textContent = diffMonths.toLocaleString();
+            document.getElementById('age-days').textContent = diffDays.toLocaleString();
+            document.getElementById('age-hours').textContent = diffHours.toLocaleString();
+            document.getElementById('age-result').classList.remove('hidden');
+        }
+
+        function updatePercentageForm() {
+            const type = document.getElementById('percentage-type').value;
+            const input1Label = document.getElementById('input1-label');
+            const input2Label = document.getElementById('input2-label');
+            const input1 = document.getElementById('percentage-input1');
+            const input2 = document.getElementById('percentage-input2');
+            
+            switch(type) {
+                case 'basic':
+                    input1Label.textContent = 'Percentage (%)';
+                    input2Label.textContent = 'Number';
+                    input1.placeholder = 'Enter percentage';
+                    input2.placeholder = 'Enter number';
+                    input1.value = '20';
+                    input2.value = '100';
+                    break;
+                case 'is':
+                    input1Label.textContent = 'Number';
+                    input2Label.textContent = 'Total';
+                    input1.placeholder = 'Enter number';
+                    input2.placeholder = 'Enter total';
+                    input1.value = '20';
+                    input2.value = '100';
+                    break;
+                case 'of':
+                    input1Label.textContent = 'Number';
+                    input2Label.textContent = 'Percentage (%)';
+                    input1.placeholder = 'Enter number';
+                    input2.placeholder = 'Enter percentage';
+                    input1.value = '20';
+                    input2.value = '20';
+                    break;
+                case 'change':
+                    input1Label.textContent = 'Original Value';
+                    input2Label.textContent = 'New Value';
+                    input1.placeholder = 'Enter original value';
+                    input2.placeholder = 'Enter new value';
+                    input1.value = '100';
+                    input2.value = '120';
+                    break;
+            }
+        }
+
+        function calculatePercentage() {
+            const type = document.getElementById('percentage-type').value;
+            const input1 = parseFloat(document.getElementById('percentage-input1').value) || 0;
+            const input2 = parseFloat(document.getElementById('percentage-input2').value) || 0;
+            let result = 0;
+            let label = 'Result';
+            
+            switch(type) {
+                case 'basic':
+                    result = (input1 / 100) * input2;
+                    label = input1 + '% of ' + input2 + ' is';
+                    break;
+                case 'is':
+                    result = (input1 / input2) * 100;
+                    label = input1 + ' is ' + result.toFixed(2) + '% of ' + input2;
+                    result = result.toFixed(2) + '%';
+                    break;
+                case 'of':
+                    result = input1 / (input2 / 100);
+                    label = input1 + ' is ' + input2 + '% of';
+                    break;
+                case 'change':
+                    result = ((input2 - input1) / input1) * 100;
+                    label = 'Percentage change';
+                    result = result.toFixed(2) + '%';
+                    break;
+            }
+            
+            if (typeof result === 'number') {
+                result = result.toFixed(2);
+            }
+            
+            document.getElementById('percentage-answer').textContent = result;
+            document.getElementById('percentage-result-label').textContent = label;
+            document.getElementById('percentage-result').classList.remove('hidden');
+        }
+
+        function updateUnitOptions() {
+            const type = document.getElementById('unit-type').value;
+            const fromUnit = document.getElementById('from-unit');
+            const toUnit = document.getElementById('to-unit');
+            
+            // Clear existing options
+            fromUnit.innerHTML = '';
+            toUnit.innerHTML = '';
+            
+            let options = [];
+            
+            switch(type) {
+                case 'length':
+                    options = [
+                        {value: 'm', text: 'Meter (m)'},
+                        {value: 'km', text: 'Kilometer (km)'},
+                        {value: 'cm', text: 'Centimeter (cm)'},
+                        {value: 'ft', text: 'Feet (ft)'},
+                        {value: 'in', text: 'Inch (in)'}
+                    ];
+                    break;
+                case 'weight':
+                    options = [
+                        {value: 'kg', text: 'Kilogram (kg)'},
+                        {value: 'g', text: 'Gram (g)'},
+                        {value: 'lb', text: 'Pound (lb)'},
+                        {value: 'oz', text: 'Ounce (oz)'}
+                    ];
+                    break;
+                case 'temperature':
+                    options = [
+                        {value: 'c', text: 'Celsius (°C)'},
+                        {value: 'f', text: 'Fahrenheit (°F)'},
+                        {value: 'k', text: 'Kelvin (K)'}
+                    ];
+                    break;
+                case 'area':
+                    options = [
+                        {value: 'sqm', text: 'Square Meter (m²)'},
+                        {value: 'sqkm', text: 'Square Kilometer (km²)'},
+                        {value: 'sqft', text: 'Square Feet (ft²)'},
+                        {value: 'acre', text: 'Acre'}
+                    ];
+                    break;
+                case 'volume':
+                    options = [
+                        {value: 'l', text: 'Liter (L)'},
+                        {value: 'ml', text: 'Milliliter (mL)'},
+                        {value: 'gal', text: 'Gallon (gal)'},
+                        {value: 'qt', text: 'Quart (qt)'}
+                    ];
+                    break;
+            }
+            
+            options.forEach(option => {
+                const optionElement1 = new Option(option.text, option.value);
+                const optionElement2 = new Option(option.text, option.value);
+                fromUnit.add(optionElement1);
+                toUnit.add(optionElement2);
+            });
+            
+            // Set default selection
+            if (toUnit.options.length > 1) {
+                toUnit.selectedIndex = 1;
+            }
+        }
+
+        function convertUnit() {
+            const type = document.getElementById('unit-type').value;
+            const value = parseFloat(document.getElementById('unit-value').value) || 0;
+            const fromUnit = document.getElementById('from-unit').value;
+            const toUnit = document.getElementById('to-unit').value;
+            
+            let result = value;
+            
+            if (type === 'temperature') {
+                // Special handling for temperature
+                if (fromUnit === 'c' && toUnit === 'f') {
+                    result = (value * 9/5) + 32;
+                } else if (fromUnit === 'c' && toUnit === 'k') {
+                    result = value + 273.15;
+                } else if (fromUnit === 'f' && toUnit === 'c') {
+                    result = (value - 32) * 5/9;
+                } else if (fromUnit === 'f' && toUnit === 'k') {
+                    result = ((value - 32) * 5/9) + 273.15;
+                } else if (fromUnit === 'k' && toUnit === 'c') {
+                    result = value - 273.15;
+                } else if (fromUnit === 'k' && toUnit === 'f') {
+                    result = ((value - 273.15) * 9/5) + 32;
+                }
+            } else if (unitConversions[type] && unitConversions[type][fromUnit] && unitConversions[type][fromUnit][toUnit]) {
+                // Use conversion factors
+                result = value * unitConversions[type][fromUnit][toUnit];
+            }
+            
+            const units = {
+                m: 'Meters', km: 'Kilometers', cm: 'Centimeters', ft: 'Feet', in: 'Inches',
+                kg: 'Kilograms', g: 'Grams', lb: 'Pounds', oz: 'Ounces',
+                c: '°C', f: '°F', k: 'K'
+            };
+            
+            document.getElementById('unit-converted-value').textContent = result.toFixed(4);
+            document.getElementById('unit-result-label').textContent = units[toUnit] || toUnit;
+            document.getElementById('unit-result').classList.remove('hidden');
+        }
+
+        // Scientific Calculator functions
+        let scientificDisplay = '';
+
+        function appendNumber(num) {
+            scientificDisplay += num;
+            updateScientificDisplay();
+        }
+
+        function appendToDisplay(value) {
+            scientificDisplay += value;
+            updateScientificDisplay();
+        }
+
+        function appendFunction(func) {
+            scientificDisplay += func;
+            updateScientificDisplay();
+        }
+
+        function updateScientificDisplay() {
+            document.getElementById('scientific-display').value = scientificDisplay || '0';
+        }
+
+        function clearDisplay() {
+            scientificDisplay = '';
+            updateScientificDisplay();
+        }
+
+        function clearEntry() {
+            scientificDisplay = '';
+            updateScientificDisplay();
+        }
+
+        function deleteLast() {
+            scientificDisplay = scientificDisplay.slice(0, -1);
+            updateScientificDisplay();
+        }
+
+        function calculateScientific() {
+            try {
+                // Replace math functions for evaluation
+                let expression = scientificDisplay
+                    .replace(/sin\(/g, 'Math.sin(')
+                    .replace(/cos\(/g, 'Math.cos(')
+                    .replace(/tan\(/g, 'Math.tan(')
+                    .replace(/log\(/g, 'Math.log10(')
+                    .replace(/sqrt\(/g, 'Math.sqrt(')
+                    .replace(/\^/g, '**');
+                
+                const result = eval(expression);
+                scientificDisplay = result.toString();
+                updateScientificDisplay();
+            } catch (error) {
+                scientificDisplay = 'Error';
+                updateScientificDisplay();
+                setTimeout(() => {
+                    clearDisplay();
+                }, 2000);
+            }
+        }
+
+        function updateTimeForm() {
+            const type = document.getElementById('time-type').value;
+            const inputs = document.getElementById('time-inputs');
+            
+            if (type === 'duration') {
+                inputs.innerHTML = `
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Start Time</label>
+                            <input type="time" class="form-input" id="start-time" value="09:00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">End Time</label>
+                            <input type="time" class="form-input" id="end-time" value="17:30">
+                        </div>
+                    </div>
+                `;
+            } else {
+                inputs.innerHTML = `
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Base Time</label>
+                            <input type="time" class="form-input" id="base-time" value="10:30">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Hours</label>
+                            <input type="number" class="form-input" id="add-hours" value="2" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Minutes</label>
+                            <input type="number" class="form-input" id="add-minutes" value="30" min="0" max="59">
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function calculateTime() {
+            const type = document.getElementById('time-type').value;
+            let result = '';
+            
+            if (type === 'duration') {
+                const startTime = document.getElementById('start-time').value;
+                const endTime = document.getElementById('end-time').value;
+                
+                const start = new Date('2000-01-01 ' + startTime);
+                const end = new Date('2000-01-01 ' + endTime);
+                
+                let diff = end - start;
+                if (diff < 0) diff += 24 * 60 * 60 * 1000; // Handle next day
+                
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                
+                result = hours + 'h ' + minutes + 'm';
+            } else {
+                const baseTime = document.getElementById('base-time').value;
+                const addHours = parseInt(document.getElementById('add-hours').value) || 0;
+                const addMinutes = parseInt(document.getElementById('add-minutes').value) || 0;
+                
+                const base = new Date('2000-01-01 ' + baseTime);
+                const totalMinutes = addHours * 60 + addMinutes;
+                
+                if (type === 'add') {
+                    base.setMinutes(base.getMinutes() + totalMinutes);
+                } else {
+                    base.setMinutes(base.getMinutes() - totalMinutes);
+                }
+                
+                result = base.toTimeString().slice(0, 5);
+            }
+            
+            document.getElementById('time-answer').textContent = result;
+            document.getElementById('time-result').classList.remove('hidden');
+        }
+
+        function calculateDiscount() {
+            const originalPrice = parseFloat(document.getElementById('original-price').value) || 0;
+            const discountPercent = parseFloat(document.getElementById('discount-percent').value) || 0;
+            
+            const discountAmount = (originalPrice * discountPercent) / 100;
+            const finalPrice = originalPrice - discountAmount;
+            
+            document.getElementById('final-price').textContent = '$' + finalPrice.toFixed(2);
+            document.getElementById('discount-amount').textContent = discountAmount.toFixed(2);
+            document.getElementById('savings-amount').textContent = discountAmount.toFixed(2);
+            document.getElementById('discount-result').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
